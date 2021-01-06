@@ -2,9 +2,8 @@
     "compilerOptions": {
         "target": "ESNEXT",
         "module": "CommonJS",
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
         "strict": true,
+        "baseUrl": "./src",
         "typeRoots": ["node_modules/@types", "src/@types"]
     }
 }

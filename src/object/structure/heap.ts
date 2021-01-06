@@ -1,6 +1,6 @@
 
 import { swap } from "../property/swap";
-import { lessThan, Comparator } from "../../util/data/comparator/comparator";
+import { lessThan, Comparator } from "util/data/comparator/comparator";
 
 const { push, pop } = Array.prototype;
 

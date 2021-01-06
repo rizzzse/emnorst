@@ -1,5 +1,5 @@
 
-import { isFunction } from "../../util/is/function";
+import { isFunction } from "util/is/function";
 
 type mapfn<T, U> = (value: T, index: number, origin: ArrayLike<T>) => U;
 
@@ -27,7 +27,7 @@ export const sum: {
     } else {
         assert.type<ArrayLike<number>>(arr);
         let accum = (init ?? arr[i++]) as number;
-        while(i < len) accum += arr[i++] as number;
+        while(i < len) accum += arr[i++];
         return accum;
     }
 };
