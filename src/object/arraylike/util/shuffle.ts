@@ -1,5 +1,5 @@
 
-import { xorshift } from "../../../number/random/xorshift";
+import { xorshift } from "number/random/xorshift";
 import { copyBase } from "../../clone";
 import { swap } from "../../property/swap";
 

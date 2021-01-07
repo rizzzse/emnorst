@@ -1,5 +1,5 @@
 
-import { isFunction } from "../../../util/is/function";
+import { isFunction } from "util/is/function";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ReturnTypeOrElse<T> = T extends (...args: any) => infer R ? R : T;

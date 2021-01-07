@@ -1,5 +1,5 @@
 
-import { typeOf } from "../../util/standard/type-of";
+import { typeOf } from "util/standard/type-of";
 
 type TypedArray
     = Int8Array

@@ -1,6 +1,6 @@
 
-import { rand } from "../../number/random/default";
-import { MAX_BIT_NUMBER } from "../../number/util/constant";
+import { rand } from "number/random/default";
+import { MAX_BIT_NUMBER } from "number/util/constant";
 
 /**
  * Generates a random string of lowercase alphabet and number.

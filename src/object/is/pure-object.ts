@@ -1,6 +1,6 @@
 
-import { Opaque } from "../../util/standard/opaque";
-import { typeOf } from "../../util/standard/type-of";
+import { Opaque } from "util/standard/opaque";
+import { typeOf } from "util/standard/type-of";
 
 /**
  * @param value

@@ -1,5 +1,5 @@
 
-import { isFunction } from "../../util/is/function";
+import { isFunction } from "util/is/function";
 
 /**
  * @param value The value to be compared

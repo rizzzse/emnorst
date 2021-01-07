@@ -1,5 +1,5 @@
 
-import { isFunction } from "../../util/is/function";
+import { isFunction } from "util/is/function";
 import { isArrayLike } from "../is/array-like";
 import { isIterable } from "../is/iterable";
 

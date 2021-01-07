@@ -2,7 +2,6 @@
 import buble from "@rollup/plugin-buble";
 import commonjs from "@rollup/plugin-commonjs";
 import inject from "@rollup/plugin-inject";
-import json from "@rollup/plugin-json";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import replace from "@rollup/plugin-replace";
 import strip from "@rollup/plugin-strip";
@@ -23,33 +22,14 @@ const banner = `/**
  * License MIT
  */`;
 
-const DevPlugins = [];
-const ProdPlugins = [
-    terser({
-        mangle: {
-            properties: { regex: /^_/ }
-        }
-    }),
-    visualizer({
-        filename: `./dist/stats.${pkg.name}.html`,
-        template: "sunburst",
-        // template: "network",
-    }),
-    analyze({
-        writeTo(analysisString) {
-            fs.writeFileSync(`./dist/analysis.${pkg.name}.txt`, analysisString);
-        }
-    }),
-];
-
-// alias, virtual
-const Plugins = [
-    json({ indent: "    ", namedExports: false }),
+// json, alias, virtual
+const getPlugins = ({ use=[] }) => [
     ts({
         transpileOnly: true,
         tsconfig: {
             declaration: DEVELOPMENT,
             target: "ES2019",
+            baseUrl: "./src",
         }
     }),
     strip({
@@ -59,10 +39,10 @@ const Plugins = [
     inject({
         // import key from value;
         // import { value[1] as key } from value[0];
-        "Array.prototype": ["src/object/standard/prototype", "ArrayPrototype"],
-        "Array.prototype.slice": ["src/object/standard/prototype", "slice"],
-        "Object.prototype": ["src/object/standard/prototype", "ObjectPrototype"],
-        "Object.keys": ["src/object/standard/keys", "keys"],
+        "Array.prototype": ["object/standard/prototype", "ArrayPrototype"],
+        "Array.prototype.slice": ["object/standard/prototype", "slice"],
+        "Object.prototype": ["object/standard/prototype", "ObjectPrototype"],
+        "Object.keys": ["object/standard/keys", "keys"],
     }),
     commonjs(),
     nodeResolve(),
@@ -72,6 +52,25 @@ const Plugins = [
         values: {
             VERSION: pkg.version,
             ENVIRONMENT: process.env.BUILD,
+        }
+    }),
+    ...use,
+    DEVELOPMENT ? null : terser({
+        mangle: {
+            properties: {
+                reserved: ["__esModule"],
+                regex: /^_/
+            }
+        }
+    }),
+    DEVELOPMENT ? null : visualizer({
+        filename: `./dist/stats.${pkg.name}.html`,
+        template: "sunburst",
+        // template: "network",
+    }),
+    DEVELOPMENT ? null : analyze({
+        writeTo(analysisString) {
+            fs.writeFileSync(`./dist/analysis.${pkg.name}.txt`, analysisString);
         }
     }),
 ];
@@ -86,23 +85,25 @@ const UMDBuild = {
         sourcemap: DEVELOPMENT,
         banner,
     },
-    plugins: [
-        ...Plugins,
-        buble({
-            transforms: {
-                dangerousForOf: true,
-                dangerousTaggedTemplateString: true,
-                forOf: false,
-                generator: false,
-            },
-            objectAssign: true,
-        }),
-        // inject({
-        //     "Object.assign": ["./src/", "assign"]
-        // }),
-        ...(DEVELOPMENT ? DevPlugins : ProdPlugins),
-    ],
-}, ESBuild = {
+    plugins: getPlugins({
+        umd: true,
+        use: [
+            buble({
+                transforms: {
+                    dangerousForOf: true,
+                    dangerousTaggedTemplateString: true,
+                    forOf: false,
+                    generator: false,
+                },
+                objectAssign: true,
+            }),
+            // inject({
+            //     "Object.assign": ["./src/", "assign"]
+            // }),
+        ],
+    }),
+};
+const ESBuild = {
     input: entry,
     output: [{
         file: pkg.module,
@@ -115,10 +116,7 @@ const UMDBuild = {
         sourcemap: DEVELOPMENT,
         banner,
     }],
-    plugins: [
-        ...Plugins,
-        ...(DEVELOPMENT ? DevPlugins : ProdPlugins),
-    ],
+    plugins: getPlugins({}),
 };
 
 export default [UMDBuild, ESBuild].map((config) => {

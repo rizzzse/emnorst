@@ -1,8 +1,8 @@
 
 import { isObject } from "../is/object";
-import { typeOf } from "../../util/standard/type-of";
+import { typeOf } from "util/standard/type-of";
 import { isTypedArray } from "../is/typed-array";
-// import { Arguments as $Arguments } from "../../util/function/simple/arguments";
+// import { Arguments as $Arguments } from "util/function/simple/arguments";
 
 /**
  * Create object with copy of prototype.
